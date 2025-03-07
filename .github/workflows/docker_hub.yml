@@ -23,6 +23,10 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ vars.DOCKER_NAMESPACE }}/sigma-cooking
+          tags: |
+            type=raw,value=latest
+            type=ref,event=pr
+            type=sha
 
       - name: Build and push
         uses: docker/build-push-action@v6
