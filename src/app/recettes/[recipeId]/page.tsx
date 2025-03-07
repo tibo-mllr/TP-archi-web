@@ -1,3 +1,4 @@
+import { Metadata, ResolvingMetadata } from "next";
 import { ReactElement } from "react";
 
 import { RecipeImage } from "@/components";
@@ -7,6 +8,22 @@ import { Recipe } from "@/lib/types";
 type RecipePageProps = {
   params: Promise<{ recipeId: string }>;
 };
+
+export async function generateMetadata(
+  { params }: RecipePageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const { recipeId } = await params;
+  const recipe = await api
+    .get<Recipe>(`/recipes/${recipeId}`)
+    .then((response) => response.data);
+
+  const globalTitle = (await parent).title?.absolute;
+
+  return {
+    title: `${recipe.name} | ${globalTitle}`,
+  };
+}
 
 export default async function RecipePage({
   params,
