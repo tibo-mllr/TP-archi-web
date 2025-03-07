@@ -1,5 +1,6 @@
 "use client";
 
+import { AxiosError } from "axios";
 import { FormEvent } from "react";
 
 import { api } from "@/lib";
@@ -14,19 +15,20 @@ export default function LoginPage() {
     const password = formData.get("password") as string;
 
     // Login directly with the API - the creds never reach the frontend server
-    const response = await api.post("/login", {
-      username: username,
-      password: password,
-    });
-
-    // Handle response if necessary
-    const data = response.data;
-
-    // TODO: Add proper error handling
-    console.log(data);
-
-    // TODO: Do something with this token - store it in a cookie or local storage
-    const token = data.token;
+    const response = await api
+      .post("/login", {
+        username: username,
+        password: password,
+      })
+      .catch((error: AxiosError) => {
+        // Non-200 status codes are thrown as errors
+        if (error.status == 401) {
+          alert("Invalid username or password");
+          return;
+        } else {
+          alert("An error occurred (" + error.status + ")");
+        }
+      });
   }
 
   return (
