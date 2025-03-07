@@ -10,7 +10,6 @@ export default async function Home(): Promise<ReactElement> {
 
   return (
     <div>
-      <h1>Home</h1>
       <table
         style={{ width: "100%" }}
         className="border-1 border-black dark:border-white"
