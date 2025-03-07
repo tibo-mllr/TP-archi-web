@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Recipes",
-  description: "A simple recipe app",
+  title: "Sigma cooking",
+  description: "A sigma recipe app",
 };
 
 export default function RootLayout({
