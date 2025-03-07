@@ -1,7 +1,7 @@
 {
   "arrowParens": "always",
   "bracketSameLine": false,
-  "singleQuote": true,
+  "singleQuote": false,
   "printWidth": 80,
   "trailingComma": "all",
   "plugins": ["@ianvs/prettier-plugin-sort-imports"],
