@@ -29,7 +29,7 @@ export default function LoginPage(): ReactElement {
           alert("An error occurred (" + error.status + ")");
         }
       });
-    
+
     // Redirect to the home page
     window.location.href = "/";
   }
