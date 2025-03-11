@@ -11,14 +11,14 @@ export async function RecipeImage({
   src,
   alt,
 }: RecipeImageProps): Promise<ReactElement> {
-  if (!src) return <></>;
+  if (!src) return <i>Sorry, we don&apos;t have an image for this recipe...</i>;
 
   let res: Response;
   try {
     res = await fetch(src);
   } catch (error) {
     console.error(error);
-    return <></>;
+    return <i>Sorry, we don&apos;t have an image for this recipe...</i>;
   }
 
   const buffer = await res.arrayBuffer();
