@@ -33,27 +33,33 @@ export default function LoginPage(): ReactElement {
 
   return (
     <>
-      <h1>Login</h1>
-      <form className="flex flex-col gap-4" onSubmit={onSubmit}>
-        <input
-          name="username"
-          type="text"
-          placeholder="Username"
-          className="bg-gray-500 border-black-700"
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          className="bg-gray-500 border-black-700"
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white border border-white-700"
+      <h1 className="bold text-center text-3xl">Login</h1>
+      <div className="flex flex-col gap-4">
+        <form
+          className="flex flex-col gap-4 self-center"
+          style={{ maxWidth: "50%" }}
+          onSubmit={onSubmit}
         >
-          Login
-        </button>
-      </form>
+          <input
+            name="username"
+            type="text"
+            placeholder="Username"
+            className="bg-gray-500 border-black-700"
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            className="bg-gray-500 border-black-700"
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 text-white border border-white-700"
+          >
+            Login
+          </button>
+        </form>
+      </div>
     </>
   );
 }
