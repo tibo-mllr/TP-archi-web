@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactElement } from "react";
 
+import { LoginButton } from "./loginButton";
+
 export function Header(): ReactElement {
   const pathname = usePathname();
 
@@ -40,14 +42,7 @@ export function Header(): ReactElement {
         </div>
 
         {/* Auth nav */}
-        <div>
-          <Link
-            href="/login"
-            className={`mx-3 my-2 ${pathname === "/login" ? "underline" : ""}`}
-          >
-            Login
-          </Link>
-        </div>
+        <LoginButton />
       </nav>
     </header>
   );
