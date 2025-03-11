@@ -14,14 +14,21 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { recipeId } = await params;
-  const recipe = await api
-    .get<Recipe>(`/recipes/${recipeId}`)
-    .then((response) => response.data);
+
+  let recipe: Recipe;
+  try {
+    recipe = await api
+      .get<Recipe>(`/recipes/${recipeId}`)
+      .then((response) => response.data);
+  } catch (error) {
+    console.error(error);
+    return {}; // If error, don't change metadata
+  }
 
   const globalTitle = (await parent).title?.absolute;
 
   return {
-    title: `${recipe.name} | ${globalTitle}`,
+    title: `${recipe.name || ""} | ${globalTitle}`,
   };
 }
 
@@ -29,9 +36,16 @@ export default async function RecipePage({
   params,
 }: RecipePageProps): Promise<ReactElement> {
   const { recipeId } = await params;
-  const recipe = await api
-    .get<Recipe>(`/recipes/${recipeId}`)
-    .then((response) => response.data);
+
+  let recipe: Recipe;
+  try {
+    recipe = await api
+      .get<Recipe>(`/recipes/${recipeId}`)
+      .then((response) => response.data);
+  } catch (error) {
+    console.error(error);
+    return <i>An error occured. Please try again later</i>;
+  }
 
   const {
     calories,

@@ -13,7 +13,14 @@ export async function RecipeImage({
 }: RecipeImageProps): Promise<ReactElement> {
   if (!src) return <></>;
 
-  const res = await fetch(src);
+  let res: Response;
+  try {
+    res = await fetch(src);
+  } catch (error) {
+    console.error(error);
+    return <></>;
+  }
+
   const buffer = await res.arrayBuffer();
   const { width, height } = await sharp(Buffer.from(buffer)).metadata();
 
