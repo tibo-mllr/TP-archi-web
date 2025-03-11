@@ -31,7 +31,8 @@ export async function RecipeImage({
       // NextJS makes width and height mandatory for CLS issues, but after that, we can still change the size of the image
       width={width}
       height={height}
-      style={{ maxWidth: "50vw" }}
+      // Now override width and height
+      style={{ width: "40vw", height: "30vh", objectFit: "scale-down" }}
     />
   );
 }
