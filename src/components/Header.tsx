@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactElement } from "react";
@@ -9,7 +10,7 @@ export function Header(): ReactElement {
 
   return (
     <header className="dark:bg-gray-700 bg-gray-100 p-4">
-      <nav className="flex justify-between">
+      <nav className="flex justify-between items-center">
         {/* Main nav */}
         <div>
           <Link
@@ -24,6 +25,18 @@ export function Header(): ReactElement {
           >
             Favorites
           </Link>
+        </div>
+
+        {/* Logo and site name */}
+        <div className="flex space-x-2 items-center">
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={212}
+            height={212}
+            style={{ maxHeight: "8vh", maxWidth: "8vh", aspectRatio: 1 }}
+          />
+          <h1 className="text-2xl text-center inline-block">Sigma cooking</h1>
         </div>
 
         {/* Auth nav */}
