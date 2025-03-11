@@ -1,5 +1,6 @@
 "use client";
 
+import { AppBar, Button, Toolbar, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,53 +12,32 @@ export function Header(): ReactElement {
   const pathname = usePathname();
 
   return (
-    <header
-      className="dark:bg-gray-700 bg-gray-100 p-4 items-center content-center"
-      style={{
-        maxHeight: "10vh",
-        paddingTop: "2vh",
-        paddingBottom: "2vh",
-        minHeight: "40px",
-      }}
-    >
-      <nav className="flex justify-between items-center relative">
-        {/* Main nav */}
-        <div>
-          <Link
-            href="/"
-            className={`mx-3 my-2 ${pathname === "/" ? "underline" : ""}`}
-          >
-            Home
-          </Link>
-          <Link
-            href="/favorites"
-            className={`mx-3 my-2 ${pathname === "/favorites" ? "underline" : ""}`}
-          >
-            Favorites
-          </Link>
-        </div>
-
+    <AppBar position="static" color="inherit" enableColorOnDark>
+      <Toolbar
+        sx={{
+          paddingY: 2,
+          gap: 2,
+        }}
+      >
         {/* Logo and site name, centered inside the whole nav */}
-        <div className="flex space-x-2 items-center absolute left-1/2 -translate-x-1/2">
-          <Image
-            src="/logo.png"
-            alt="Logo"
-            width={212}
-            height={212}
-            style={{
-              maxHeight: "5vh",
-              maxWidth: "5vh",
-              aspectRatio: 1,
-              minHeight: "30px",
-              minWidth: "30px",
-            }}
-          />
-          <h1 className="text-2xl text-center inline-block">Sigma cooking</h1>
-        </div>
+        <Image src="/logo.png" alt="Logo" width={60} height={60} />
+        <Typography variant="h5">Sigma cooking</Typography>
+
+        {/* Main nav */}
+        <Link href="/">
+          <Button variant={pathname == "/" ? "contained" : "outlined"}>
+            Home
+          </Button>
+        </Link>
+        <Link href="/favorites">
+          <Button variant={pathname == "/favorites" ? "contained" : "outlined"}>
+            Favorites
+          </Button>
+        </Link>
 
         {/* Auth nav */}
         <LoginButton />
-      </nav>
-    </header>
+      </Toolbar>
+    </AppBar>
   );
 }
