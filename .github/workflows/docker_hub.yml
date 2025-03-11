@@ -6,7 +6,34 @@ on:
       - main
 
 jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.filter.outputs.app }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Path filtering
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            app:
+              - '.github/workflows/docker_hub.yml'
+              - 'src/**'
+              - '.prettierrc'
+              - 'eslint.config.mjs'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'tsconfig.json'
+              - 'next.config.ts'
+              - 'postcss.config.mjs'
+              - 'Dockerfile'
+
   docker:
+    needs: check-changes
+    if: needs.check-changes.outputs.changed == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

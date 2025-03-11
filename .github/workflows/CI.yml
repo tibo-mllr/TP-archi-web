@@ -6,7 +6,34 @@ on:
       - main
 
 jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.filter.outputs.app }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Path filtering
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            app:
+              - '.github/workflows/CI.yml'
+              - 'src/**'
+              - '.prettierrc'
+              - 'eslint.config.mjs'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'tsconfig.json'
+              - 'next.config.ts'
+              - 'postcss.config.mjs'
+              - 'Dockerfile'
+
   build:
+    needs: check-changes
+    if: needs.check-changes.outputs.changed == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -24,6 +51,8 @@ jobs:
         run: npm run build
 
   docker:
+    needs: check-changes
+    if: needs.check-changes.outputs.changed == 'true'
     runs-on: ubuntu-latest
 
     permissions:
@@ -47,4 +76,3 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/${{ github.repository_owner}}/sigma-cooking:${{ github.sha }}
-
