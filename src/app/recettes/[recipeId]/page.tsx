@@ -66,7 +66,7 @@ export default async function RecipePage({
   } = recipe;
 
   return (
-    <>
+    <div className="flex flex-col space-y-3">
       {/* Presentation part */}
       <div className="flex flex-row space-x-3">
         <RecipeImage src={image_url} alt={description} />
@@ -100,7 +100,9 @@ export default async function RecipePage({
       {/* Instructions */}
       <div>
         <h2>Instructions</h2>
-        <pre>{instructions}</pre>
+        <pre style={{ maxWidth: "100%", overflowX: "auto" }}>
+          {instructions}
+        </pre>
       </div>
       {/* Metadata */}
       <footer>
@@ -109,6 +111,6 @@ export default async function RecipePage({
         </p>
         {published ? <p>Published</p> : <p>Not published</p>}
       </footer>
-    </>
+    </div>
   );
 }
