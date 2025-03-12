@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@mui/material";
+import { Container, ThemeProvider } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -37,7 +37,9 @@ export default function RootLayout({
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             <Header />
-            <main className="p-4">{children}</main>
+            <main className="p-4">
+              <Container>{children}</Container>
+            </main>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
