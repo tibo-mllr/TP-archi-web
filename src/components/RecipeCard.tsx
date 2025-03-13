@@ -1,0 +1,69 @@
+import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import Link from "next/link";
+import { ReactElement } from "react";
+
+import { Recipe } from "@/lib/types";
+
+type RecipeCardProps = {
+  recipe: Recipe;
+};
+
+export function RecipeCard({ recipe }: RecipeCardProps): ReactElement {
+  const { id, name, description, image_url } = recipe;
+
+  return (
+    <Card
+      // Use a NextJS Link so that we can click without re-rendering everything (but use MUI Card styles)
+      component={Link}
+      href={`/recettes/${id}`}
+      sx={{
+        // Hacked styles from normal Card start here
+        display: "inline-block",
+        borderRadius: "4px",
+        boxShadow: "var(--Paper-shadow)",
+        transition: "box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+        // Hacked styles from normal Card end here
+        position: "relative",
+        height: "100%",
+        width: "100%",
+        // When hover, display the description
+        "&:hover .content": {
+          maxHeight: "50px",
+          opacity: 1,
+        },
+      }}
+    >
+      <CardMedia
+        component="img"
+        image={image_url}
+        alt={name}
+        sx={{ height: "100%", width: "100%" }}
+      />
+      <CardContent
+        sx={{
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          background:
+            "linear-gradient(to top, rgba(0, 0, 0, 0.6) 70%, rgba(0, 0, 0, 0))",
+        }}
+      >
+        <Typography variant="h6">{name}</Typography>
+        <Typography
+          className="content" // Necessary in order to display this part on hover
+          variant="body2"
+          sx={{
+            overflow: "hidden",
+            maxHeight: 0, // Changes on hover
+            opacity: 0, // Changes on hover
+            transition: "max-height 0.4s ease-in, opacity 0.3s ease-in 0.1s", // Transition for hover
+          }}
+        >
+          {!!description && description.length > 160
+            ? description.substring(0, 157) + "..."
+            : description}
+        </Typography>
+      </CardContent>
+    </Card>
+  );
+}

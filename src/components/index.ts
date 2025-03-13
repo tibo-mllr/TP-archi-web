@@ -1,2 +1,2 @@
 export * from "./Header";
-export * from "./RecipeImage";
+export * from "./RecipeCard";

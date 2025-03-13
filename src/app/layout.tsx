@@ -1,8 +1,11 @@
+import { Container, ThemeProvider } from "@mui/material";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { type ReactElement } from "react";
 
 import { Header } from "@/components";
+import { theme } from "@/lib/MUITheme";
 
 import "./globals.css";
 
@@ -31,8 +34,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        <main className="p-4">{children}</main>
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>
+            <Header />
+            <main className="p-4">
+              <Container>{children}</Container>
+            </main>
+          </ThemeProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

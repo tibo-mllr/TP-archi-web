@@ -1,8 +1,24 @@
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import AvTimerIcon from "@mui/icons-material/AvTimer";
+import ClassIcon from "@mui/icons-material/Class";
+import EuroIcon from "@mui/icons-material/Euro";
+import PeopleIcon from "@mui/icons-material/People";
+import WhatshotIcon from "@mui/icons-material/Whatshot";
+import {
+  Card,
+  CardMedia,
+  Grid2,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import { Metadata, ResolvingMetadata } from "next";
 import { ReactElement } from "react";
 
-import { RecipeImage } from "@/components";
-import { api } from "@/lib";
+import { RecipeCard } from "@/components";
+import { api, capitalizeFirstLetter } from "@/lib";
 import { Recipe } from "@/lib/types";
 
 type RecipePageProps = {
@@ -32,6 +48,22 @@ export async function generateMetadata(
   };
 }
 
+function parseInstructions(instructions?: string): ReactElement {
+  const lines = instructions?.split("\n");
+  let isList = false;
+  const elements = lines?.map((line, index) => {
+    if (line.startsWith("-")) {
+      isList = true;
+      return <li key={index}>{line.slice(1).trim()}</li>;
+    }
+    return <p key={index}>{line}</p>;
+  });
+
+  if (isList) return <ul>{elements}</ul>;
+
+  return <div>{elements}</div>;
+}
+
 export default async function RecipePage({
   params,
 }: RecipePageProps): Promise<ReactElement> {
@@ -46,6 +78,12 @@ export default async function RecipePage({
     console.error(error);
     return <i>An error occured. Please try again later</i>;
   }
+
+  const relatedRecipes = await api
+    .get<Recipe[]>(`/recipes/${recipeId}/related`)
+    .then((response) => response.data)
+    .catch(() => []);
+  const hasRelated = relatedRecipes.length > 0;
 
   const {
     calories,
@@ -66,51 +104,147 @@ export default async function RecipePage({
   } = recipe;
 
   return (
-    <div className="flex flex-col space-y-3">
-      {/* Presentation part */}
-      <div className="flex flex-row space-x-3">
-        <RecipeImage src={image_url} alt={description} />
-        <div>
-          <h1>{name}</h1>
-          <ul>
-            <li>
-              <b>Category:</b> {category || <i>Undefined</i>}
-            </li>
-            <li>
-              <b>When to eat:</b> {when_to_eat}
-            </li>
-            {!!servings && <li>For {servings} servings</li>}
-            <li>
-              <b>Preparation time:</b> {prep_time} minutes
-            </li>
-            <li>
-              <b>Cooking time:</b> {cook_time} minutes
-            </li>
-            {!!calories && <li>{calories} calories</li>}
-            {!!cost && <li>{cost} cost</li>}
-          </ul>
-        </div>
-      </div>
-      {/* Disclaimer */}
-      {!!disclaimer && (
-        <div>
-          <i>Disclaimer: {disclaimer}</i>
-        </div>
+    <Grid2 container spacing={5}>
+      {/* Main article */}
+      <Grid2
+        container
+        size={{ xs: 12, md: hasRelated ? 9 : 12 }}
+        direction="column"
+        spacing={2}
+      >
+        {/* Name and description */}
+        <Grid2 size={12}>
+          <Typography variant="h2">{name}</Typography>
+        </Grid2>
+        <Grid2 size={12}>
+          <Typography variant="subtitle1">{description}</Typography>
+        </Grid2>
+
+        {/* Image and summary */}
+        <Grid2 container size={12}>
+          {!!image_url && (
+            <Grid2 size={{ xs: 12, sm: 8, md: 8 }}>
+              <Card sx={{ height: "100%", width: "100%" }}>
+                <CardMedia
+                  component="img"
+                  image={image_url}
+                  alt={name}
+                  sx={{ height: "100%", width: "100%", objectFit: "contain" }}
+                />
+              </Card>
+            </Grid2>
+          )}
+
+          {/* Summary part */}
+          <Grid2 size={{ xs: 12, sm: 4, md: 4 }}>
+            <List>
+              <ListItem>
+                <ListItemText>
+                  <Typography variant="h6">
+                    {capitalizeFirstLetter(when_to_eat ?? "") ||
+                      "Eat whenever you want"}
+                  </Typography>
+                </ListItemText>
+              </ListItem>
+              {!!category && (
+                <ListItem>
+                  <ListItemIcon>
+                    <ClassIcon />
+                  </ListItemIcon>
+                  <ListItemText>{category}</ListItemText>
+                </ListItem>
+              )}
+              <ListItem>
+                <ListItemIcon>
+                  <AccessTimeIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <b>Preparation:</b> {prep_time} minutes
+                </ListItemText>
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <AvTimerIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <b>Cooking:</b> {cook_time} minutes
+                </ListItemText>
+              </ListItem>
+              {!!servings && (
+                <ListItem>
+                  <ListItemIcon>
+                    <PeopleIcon />
+                  </ListItemIcon>
+                  <ListItemText>{servings}</ListItemText>
+                </ListItem>
+              )}
+              <ListItem>
+                <ListItemIcon>
+                  <WhatshotIcon color="warning" />
+                </ListItemIcon>
+                <ListItemText>{calories || "?"} kcal</ListItemText>
+              </ListItem>
+              {!!cost && (
+                <ListItem>
+                  <ListItemIcon>
+                    <EuroIcon />
+                  </ListItemIcon>
+                  <ListItemText>{cost} €</ListItemText>
+                </ListItem>
+              )}
+            </List>
+          </Grid2>
+        </Grid2>
+
+        {/* Disclaimer */}
+        {!!disclaimer && (
+          <Grid2 size={12}>
+            <i>Disclaimer: {disclaimer}</i>
+          </Grid2>
+        )}
+
+        {/* Instructions */}
+        <Grid2 container direction="column" size={12}>
+          <Typography variant="h4">Instructions</Typography>
+          <Grid2>{parseInstructions(instructions)}</Grid2>
+        </Grid2>
+      </Grid2>
+
+      {/* Related recipes */}
+      {hasRelated && (
+        <Grid2
+          container
+          size={{ xs: 12, md: 3 }}
+          spacing={3}
+          sx={{
+            maxHeight: { xs: "none", md: "100vh" },
+            overflow: { xs: "none", md: "auto" },
+          }}
+        >
+          <Grid2 size={12}>
+            <Typography variant="h5">Others you might like:</Typography>
+          </Grid2>
+          {relatedRecipes.map((relatedRecipe) => (
+            <Grid2
+              key={relatedRecipe.id}
+              size={{ xs: 6, md: 12 }}
+              minHeight="15vh"
+            >
+              <RecipeCard recipe={relatedRecipe} />
+            </Grid2>
+          ))}
+        </Grid2>
       )}
-      {/* Instructions */}
-      <div>
-        <h2>Instructions</h2>
-        <pre style={{ maxWidth: "100%", overflowX: "auto" }}>
-          {instructions}
-        </pre>
-      </div>
+
       {/* Metadata */}
-      <footer>
-        <p>
-          Created by {created_by} on {created_at}
-        </p>
-        {published ? <p>Published</p> : <p>Not published</p>}
-      </footer>
-    </div>
+      <Grid2 size={12}>
+        <footer>
+          <Typography variant="caption">
+            {published ? "Published" : "Created"} by {created_by}
+            {!!created_at && ` on ${new Date(created_at).toLocaleDateString()}`}
+          </Typography>
+        </footer>
+      </Grid2>
+    </Grid2>
   );
 }
