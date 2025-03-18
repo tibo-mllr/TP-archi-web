@@ -234,7 +234,7 @@ export default async function RecipePage({
           {relatedRecipes.map((relatedRecipe) => (
             <Grid2
               key={relatedRecipe.id}
-              size={{ xs: 6, md: 12 }}
+              size={{ xs: 6, sm: 4, md: 12 }}
               minHeight="15vh"
             >
               <RecipeCard recipe={relatedRecipe} />
