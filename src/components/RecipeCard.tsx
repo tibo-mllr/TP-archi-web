@@ -35,7 +35,7 @@ export function RecipeCard({ recipe }: RecipeCardProps): ReactElement {
     >
       <CardMedia
         component="img"
-        image={image_url}
+        image={image_url || "/defaultDishImage.jpg"}
         alt={name}
         sx={{ height: "100%", width: "100%" }}
       />
