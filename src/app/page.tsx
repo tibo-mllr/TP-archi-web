@@ -1,49 +1,22 @@
-"use client";
+import { Grid2 } from "@mui/material";
+import { type ReactElement } from "react";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState, type ReactElement } from "react";
-
+import { RecipeCard } from "@/components";
 import { api } from "@/lib";
 import { type Recipe } from "@/lib/types";
 
-export default function Home(): ReactElement {
-  const router = useRouter();
-
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-
-  useEffect(() => {
-    api.get<Recipe[]>("/recipes").then((response) => setRecipes(response.data));
-  }, []);
+export default async function Home(): Promise<ReactElement> {
+  const recipes = await api
+    .get<Recipe[]>("/recipes")
+    .then((response) => response.data);
 
   return (
-    <div>
-      <table
-        style={{ width: "100%" }}
-        className="border-1 border-black dark:border-white"
-      >
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Cost</th>
-          </tr>
-        </thead>
-        <tbody>
-          {recipes.map((recipe) => (
-            <tr
-              key={recipe.id}
-              onClick={() => router.push(`/recettes/${recipe.id}`)}
-              className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              <td>{recipe.name}</td>
-              <td>{recipe.category || <i>None</i>}</td>
-              <td>{recipe.description}</td>
-              <td>{recipe.cost || <i>Unknown</i>}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Grid2 container columns={{ xs: 4, sm: 8, md: 12 }} spacing={3}>
+      {recipes.map((recipe) => (
+        <Grid2 key={recipe.id} size={{ xs: 2, sm: 4, md: 4 }}>
+          <RecipeCard recipe={recipe} />
+        </Grid2>
+      ))}
+    </Grid2>
   );
 }
