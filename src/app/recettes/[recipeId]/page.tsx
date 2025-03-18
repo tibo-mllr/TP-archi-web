@@ -221,7 +221,14 @@ export default async function RecipePage({
             overflow: { xs: "none", md: "auto" },
           }}
         >
-          <Grid2 size={12}>
+          <Grid2
+            size={12}
+            position="sticky"
+            top={0}
+            zIndex={100}
+            bgcolor="var(--background)"
+            paddingBottom={2}
+          >
             <Typography variant="h5">Others you might like:</Typography>
           </Grid2>
           {relatedRecipes.map((relatedRecipe) => (
