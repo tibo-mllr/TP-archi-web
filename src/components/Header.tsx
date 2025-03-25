@@ -54,7 +54,7 @@ export function Header(): ReactElement {
         }}
       >
         {/* Logo and site name, centered inside the whole nav */}
-        <Image src="/logo.png" alt="Logo" width={60} height={60} />
+        <Image src="/logo.webp" alt="Logo" width={60} height={60} />
         <Typography variant="h5">Sigma cooking</Typography>
 
         {/* Navigation */}

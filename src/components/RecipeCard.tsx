@@ -42,7 +42,7 @@ export function RecipeCard({
         sx={{ position: "relative", width: "100%", aspectRatio: "4 / 3" }}
       >
         <Image
-          src={image_url || "/defaultDishImage.jpg"}
+          src={image_url || "/defaultDishImage.webp"}
           alt={name ?? "An image of the dish"}
           fill
           sizes={imageSizes}
