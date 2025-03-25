@@ -124,7 +124,7 @@ export default async function RecipePage({
         {/* Image and summary */}
         <Grid2 container size={12}>
           {!!image_url && (
-            <Grid2 size={{ xs: 12, sm: 8, md: 8 }}>
+            <Grid2 size={{ xs: 12, sm: 8 }}>
               <Card sx={{ height: "100%", width: "100%" }}>
                 <CardMedia
                   sx={{
@@ -137,7 +137,9 @@ export default async function RecipePage({
                     src={image_url}
                     alt={name ?? "An image of the dish"}
                     fill
+                    sizes="(max-width: 600px) 100vw, (max-width: 900px) 67vw, 50vw"
                     style={{ objectFit: "contain" }}
+                    priority
                   />
                 </CardMedia>
               </Card>
@@ -246,7 +248,10 @@ export default async function RecipePage({
               size={{ xs: 6, sm: 4, md: 12 }}
               minHeight="15vh"
             >
-              <RecipeCard recipe={relatedRecipe} />
+              <RecipeCard
+                recipe={relatedRecipe}
+                imageSizes="(max-width: 600px) 50vw, (max-width: 900px) 33vw, 25vw"
+              />
             </Grid2>
           ))}
         </Grid2>

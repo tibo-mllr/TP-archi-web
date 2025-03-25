@@ -7,9 +7,13 @@ import { Recipe } from "@/lib/types";
 
 type RecipeCardProps = {
   recipe: Recipe;
+  imageSizes: string;
 };
 
-export function RecipeCard({ recipe }: RecipeCardProps): ReactElement {
+export function RecipeCard({
+  recipe,
+  imageSizes,
+}: RecipeCardProps): ReactElement {
   const { id, name, description, image_url } = recipe;
 
   return (
@@ -41,6 +45,7 @@ export function RecipeCard({ recipe }: RecipeCardProps): ReactElement {
           src={image_url || "/defaultDishImage.jpg"}
           alt={name ?? "An image of the dish"}
           fill
+          sizes={imageSizes}
           style={{ objectFit: "cover" }}
         />
       </CardMedia>
