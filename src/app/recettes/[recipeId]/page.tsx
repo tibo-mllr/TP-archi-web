@@ -23,6 +23,8 @@ import { RecipeCard } from "@/components";
 import { api, capitalizeFirstLetter } from "@/lib";
 import { Recipe } from "@/lib/types";
 
+import AddToFavoritesButton from "./ui/AddToFavoritesButton";
+
 type RecipePageProps = {
   params: Promise<{ recipeId: string }>;
 };
@@ -152,6 +154,9 @@ export default async function RecipePage({
           {/* Summary part */}
           <Grid2 size={{ xs: 12, sm: 4, md: 4 }}>
             <List>
+              <ListItem>
+                <AddToFavoritesButton recipe={recipe} />
+              </ListItem>
               <ListItem>
                 <ListItemIcon>
                   <RestaurantIcon />
