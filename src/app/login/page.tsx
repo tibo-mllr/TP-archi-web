@@ -36,7 +36,6 @@ export default function LoginPage(): ReactElement {
 
   return (
     <>
-      <h1 className="bold text-center text-3xl">Login</h1>
       <div className="flex flex-col gap-4">
         <form
           className="flex flex-col gap-4 self-center"
