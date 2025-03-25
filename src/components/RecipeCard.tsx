@@ -1,4 +1,5 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import Image from "next/image";
 import Link from "next/link";
 import { ReactElement } from "react";
 
@@ -18,7 +19,7 @@ export function RecipeCard({ recipe }: RecipeCardProps): ReactElement {
       href={`/recettes/${id}`}
       sx={{
         // Hacked styles from normal Card start here
-        display: "inline-block",
+        display: "block",
         borderRadius: "4px",
         boxShadow: "var(--Paper-shadow)",
         transition: "box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
@@ -34,11 +35,15 @@ export function RecipeCard({ recipe }: RecipeCardProps): ReactElement {
       }}
     >
       <CardMedia
-        component="img"
-        image={image_url || "/defaultDishImage.jpg"}
-        alt={name}
-        sx={{ height: "100%", width: "100%" }}
-      />
+        sx={{ position: "relative", width: "100%", aspectRatio: "4 / 3" }}
+      >
+        <Image
+          src={image_url || "/defaultDishImage.jpg"}
+          alt={name ?? "An image of the dish"}
+          fill
+          style={{ objectFit: "cover" }}
+        />
+      </CardMedia>
       <CardContent
         sx={{
           position: "absolute",

@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Metadata, ResolvingMetadata } from "next";
+import Image from "next/image";
 import { ReactElement } from "react";
 
 import { RecipeCard } from "@/components";
@@ -126,11 +127,19 @@ export default async function RecipePage({
             <Grid2 size={{ xs: 12, sm: 8, md: 8 }}>
               <Card sx={{ height: "100%", width: "100%" }}>
                 <CardMedia
-                  component="img"
-                  image={image_url}
-                  alt={name}
-                  sx={{ height: "100%", width: "100%", objectFit: "contain" }}
-                />
+                  sx={{
+                    position: "relative",
+                    width: "100%",
+                    aspectRatio: "16 / 9",
+                  }}
+                >
+                  <Image
+                    src={image_url}
+                    alt={name ?? "An image of the dish"}
+                    fill
+                    style={{ objectFit: "contain" }}
+                  />
+                </CardMedia>
               </Card>
             </Grid2>
           )}
