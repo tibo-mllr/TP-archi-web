@@ -1,5 +1,15 @@
 "use client";
 
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  FormControl,
+  FormGroup,
+  Input,
+  TextField,
+} from "@mui/material";
 import { AxiosError } from "axios";
 import { FormEvent, ReactElement } from "react";
 
@@ -35,33 +45,23 @@ export default function LoginPage(): ReactElement {
   }
 
   return (
-    <>
-      <div className="flex flex-col gap-4">
-        <form
-          className="flex flex-col gap-4 self-center"
-          style={{ maxWidth: "50%" }}
-          onSubmit={onSubmit}
-        >
-          <input
-            name="username"
-            type="text"
-            placeholder="Username"
-            className="bg-gray-500 border-black-700"
-          />
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            className="bg-gray-500 border-black-700"
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 text-white border border-white-700"
-          >
+    <Card className="flex w-fit m-auto px-15 py-5">
+      <form
+        className="flex flex-col justify-center items-center p-3"
+        onSubmit={onSubmit}
+      >
+        <CardContent>
+          <FormGroup sx={{ gap: 2 }}>
+            <TextField label="Username" name="username" type="text" />
+            <TextField label="Password" name="password" type="password" />
+          </FormGroup>
+        </CardContent>
+        <CardActions>
+          <Button type="submit" variant="contained">
             Login
-          </button>
-        </form>
-      </div>
-    </>
+          </Button>
+        </CardActions>
+      </form>
+    </Card>
   );
 }
