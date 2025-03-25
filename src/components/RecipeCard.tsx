@@ -46,6 +46,7 @@ export function RecipeCard({ recipe }: RecipeCardProps): ReactElement {
           width: "100%",
           background:
             "linear-gradient(to top, rgba(0, 0, 0, 0.6) 70%, rgba(0, 0, 0, 0))",
+          color: "white",
         }}
       >
         <Typography variant="h6">{name}</Typography>
