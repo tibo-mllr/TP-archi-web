@@ -2,7 +2,7 @@
 
 import { List, ListItem } from "@mui/material";
 import { redirect } from "next/navigation";
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 
 import { RecipeCard } from "@/components";
 import { api } from "@/lib";
@@ -10,13 +10,17 @@ import { Recipe } from "@/lib/types";
 
 function getFavorites(): Promise<Recipe[]> {
   return (
-    api("/favorites")
-      .then((response) => response.data)
+    api
+      .get<{ recipe: Recipe }[]>("/favorites")
+      .then((response) =>
+        response.data.map((outerRecipeObj) => outerRecipeObj.recipe),
+      )
       // Redirect to /login in case of 401
       .catch((error) => {
         if (error.response.status == 401) {
           redirect("/login");
         }
+        return [];
       })
   );
 }
@@ -25,7 +29,9 @@ export default function FavoritesPage(): ReactElement {
   // Now we know we are authenticated
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
-  getFavorites().then((recipes) => setRecipes(recipes));
+  useEffect(() => {
+    getFavorites().then((recipes) => setRecipes(recipes));
+  }, []);
 
   return (
     <List>
