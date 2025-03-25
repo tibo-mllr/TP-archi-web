@@ -1,21 +1,26 @@
 "use client";
 
 import { List, ListItem } from "@mui/material";
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 
 import { RecipeCard } from "@/components";
 import { apiGet } from "@/lib";
 import { Recipe } from "@/lib/types";
 
-function getFavorites(): Promise<Recipe[]> {
-  return apiGet<Recipe[]>("/favorites");
+async function getFavorites(): Promise<Recipe[]> {
+  const recipeResults = await apiGet<{ recipe: Recipe }[]>("/favorites", {
+    defaultResult: [],
+  });
+  return recipeResults.map((outerRecipeObj) => outerRecipeObj.recipe);
 }
 
 export default function FavoritesPage(): ReactElement {
   // Now we know we are authenticated
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
-  getFavorites().then((recipes) => setRecipes(recipes));
+  useEffect(() => {
+    getFavorites().then((recipes) => setRecipes(recipes));
+  }, []);
 
   return (
     <List>
