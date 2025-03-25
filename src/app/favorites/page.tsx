@@ -29,7 +29,7 @@ export default function FavoritesPage(): ReactElement {
       ) : (
         recipes.map((recipe) => (
           <ListItem key={recipe.id}>
-            <RecipeCard recipe={recipe} />
+            <RecipeCard recipe={recipe} imageSizes="100vw" />
           </ListItem>
         ))
       )}
