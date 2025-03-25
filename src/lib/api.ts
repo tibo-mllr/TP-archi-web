@@ -36,9 +36,11 @@ export async function apiGet<T>(
       }
 
       // Custom callback in other cases
-      errorCallback(error);
-      return defaultResult;
-    });
+      console.error(error);
+      const callbackResult = errorCallback(error);
+      return callbackResult || defaultResult;
+    })
+    .finally(() => defaultResult);
 }
 
 export async function apiPost<T>(
@@ -61,8 +63,10 @@ export async function apiPost<T>(
         redirect("/login");
       }
 
+      console.error(error);
       // Custom callback in other cases
-      errorCallback(error);
-      return defaultResult;
-    });
+      const callbackResult = errorCallback(error);
+      return callbackResult || defaultResult;
+    })
+    .finally(() => defaultResult);
 }
