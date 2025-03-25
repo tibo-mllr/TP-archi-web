@@ -5,15 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactElement, useEffect, useState } from "react";
 
-import { api } from "@/lib";
-
-async function checkLogin(): Promise<boolean> {
-  return await api
-    .get("/me")
-    .then((response) => response.status == 200)
-    .catch(() => false)
-    .finally(() => false);
-}
+import { api, checkLogin } from "@/lib";
 
 export function LoginButton(): ReactElement {
   const pathname = usePathname();

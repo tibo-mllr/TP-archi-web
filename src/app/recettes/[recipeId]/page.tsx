@@ -3,6 +3,7 @@ import AvTimerIcon from "@mui/icons-material/AvTimer";
 import ClassIcon from "@mui/icons-material/Class";
 import EuroIcon from "@mui/icons-material/Euro";
 import PeopleIcon from "@mui/icons-material/People";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
 import {
   Card,
@@ -22,10 +23,13 @@ import { RecipeCard } from "@/components";
 import { api, capitalizeFirstLetter } from "@/lib";
 import { Recipe } from "@/lib/types";
 
+import AddToFavoritesButton from "./ui/AddToFavoritesButton";
+
 type RecipePageProps = {
   params: Promise<{ recipeId: string }>;
 };
 
+// TODO: Move to different file probably
 export async function generateMetadata(
   { params }: RecipePageProps,
   parent: ResolvingMetadata,
@@ -49,6 +53,7 @@ export async function generateMetadata(
   };
 }
 
+// TODO: Ditto
 function parseInstructions(instructions?: string): ReactElement {
   const lines = instructions?.split("\n");
   let isList = false;
@@ -150,11 +155,15 @@ export default async function RecipePage({
           <Grid2 size={{ xs: 12, sm: 4, md: 4 }}>
             <List>
               <ListItem>
+                <AddToFavoritesButton recipe={recipe} />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <RestaurantIcon />
+                </ListItemIcon>
                 <ListItemText>
-                  <Typography variant="h6">
-                    {capitalizeFirstLetter(when_to_eat ?? "") ||
-                      "Eat whenever you want"}
-                  </Typography>
+                  <b>Type: </b>
+                  {capitalizeFirstLetter(when_to_eat || "Misc.")}
                 </ListItemText>
               </ListItem>
               {!!category && (
