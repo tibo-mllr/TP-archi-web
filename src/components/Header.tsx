@@ -1,49 +1,92 @@
 "use client";
 
+import MenuIcon from "@mui/icons-material/Menu";
+import {
+  AppBar,
+  Box,
+  Button,
+  Drawer,
+  IconButton,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactElement } from "react";
+import { useState, type ReactElement } from "react";
 
 import { LoginButton } from "./loginButton";
 
 export function Header(): ReactElement {
   const pathname = usePathname();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const [open, setOpen] = useState(false);
+
+  const navLinks: ReactElement = (
+    <>
+      {/* Main nav */}
+      <Link href="/">
+        <Button variant={pathname == "/" ? "contained" : "outlined"}>
+          Home
+        </Button>
+      </Link>
+      <Link href="/favorites">
+        <Button variant={pathname == "/favorites" ? "contained" : "outlined"}>
+          Favorites
+        </Button>
+      </Link>
+
+      {/* Auth nav */}
+      <LoginButton />
+    </>
+  );
 
   return (
-    <header className="dark:bg-gray-700 bg-gray-100 p-4">
-      <nav className="flex justify-between items-center">
-        {/* Main nav */}
-        <div>
-          <Link
-            href="/"
-            className={`mx-3 my-2 ${pathname === "/" ? "underline" : ""}`}
-          >
-            Home
-          </Link>
-          <Link
-            href="/favorites"
-            className={`mx-3 my-2 ${pathname === "/favorites" ? "underline" : ""}`}
-          >
-            Favorites
-          </Link>
-        </div>
+    <AppBar position="static" color="inherit" enableColorOnDark>
+      <Toolbar
+        sx={{
+          paddingY: 2,
+          gap: 2,
+        }}
+      >
+        {/* Logo and site name, centered inside the whole nav */}
+        <Image src="/logo.png" alt="Logo" width={60} height={60} />
+        <Typography variant="h5">Sigma cooking</Typography>
 
-        {/* Logo and site name */}
-        <div className="flex space-x-2 items-center">
-          <Image
-            src="/logo.png"
-            alt="Logo"
-            width={212}
-            height={212}
-            style={{ maxHeight: "8vh", maxWidth: "8vh", aspectRatio: 1 }}
-          />
-          <h1 className="text-2xl text-center inline-block">Sigma cooking</h1>
-        </div>
-
-        {/* Auth nav */}
-        <LoginButton />
-      </nav>
-    </header>
+        {/* Navigation */}
+        {isMobile ? (
+          <>
+            <IconButton
+              color="inherit"
+              onClick={() => setOpen(true)}
+              sx={{ marginLeft: "auto" }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
+              <Box
+                sx={{
+                  width: "35vw",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                  padding: 3,
+                }}
+                role="presentation"
+                onClick={() => setOpen(false)}
+              >
+                {navLinks}
+              </Box>
+            </Drawer>
+          </>
+        ) : (
+          navLinks
+        )}
+      </Toolbar>
+    </AppBar>
   );
 }

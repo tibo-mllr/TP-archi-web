@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactElement, useEffect, useState } from "react";
@@ -45,17 +46,20 @@ export function LoginButton(): ReactElement {
 
   if (isLoggedIn) {
     return (
-      <button onClick={logout} className="mx-3 my-2">
+      <Button
+        onClick={logout}
+        sx={{ marginLeft: "auto" }}
+        variant={pathname == "/login" ? "contained" : "outlined"}
+      >
         Logout
-      </button>
+      </Button>
     );
   }
   return (
-    <Link
-      href="/login"
-      className={`mx-3 my-2 ${pathname === "/login" ? "underline" : ""}`}
-    >
-      Login
+    <Link href="/login" className="ml-auto">
+      <Button variant={pathname == "/login" ? "contained" : "outlined"}>
+        Login
+      </Button>
     </Link>
   );
 }
