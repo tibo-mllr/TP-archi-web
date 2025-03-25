@@ -8,16 +8,26 @@ export const api = Axios.create({
   headers: { Accept: "application/json, application/xml" },
 });
 
+interface apiCallOptions<T> {
+  axiosConfig?: object;
+  redirect401?: boolean;
+  defaultResult?: T;
+  errorCallback?: (error: AxiosError) => void | T;
+}
+
 export async function apiGet<T>(
   url: string,
-  config: object = {}, // Default: empty object - usually used for query params
-  redirect401: boolean = true, // Default: true - redirect to login page in case of 401
-  defaultResult: T = <T>null, // Default: null
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  errorCallback: (error: AxiosError) => void = (_error) => {}, // Default: do nothing
+  // Very cursed syntax, but see https://stackoverflow.com/questions/23314806/setting-default-value-for-typescript-object-passed-as-argument
+  {
+    axiosConfig = {}, // Default: empty object - usually used for query params
+    redirect401 = true, // Default: true - redirect to login page in case of 401
+    defaultResult = <T>null, // Default: null
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    errorCallback = (_error) => {}, // Default: do nothing
+  }: apiCallOptions<T> = {},
 ): Promise<T> {
   return api
-    .get<T>(url, config)
+    .get<T>(url, axiosConfig)
     .then((response) => response.data)
     .catch((error) => {
       // "Usual" callback in case of expired token
@@ -34,14 +44,16 @@ export async function apiGet<T>(
 export async function apiPost<T>(
   url: string,
   data: object, // No default, usually for a post we will want a body
-  config: object = {}, // Default: empty object - usually used for query params
-  redirect401: boolean = true, // Default: true - redirect to login page in case of 401
-  defaultResult: T = <T>null, // Default: null
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  errorCallback: (error: AxiosError) => void = (_error) => {}, // Default: do nothing
+  {
+    axiosConfig = {},
+    redirect401 = true, // Default: true - redirect to login page in case of 401
+    defaultResult = <T>null, // Default: null
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    errorCallback = (_error) => {}, // Default: empty object - usually used for query params
+  }: apiCallOptions<T> = {},
 ): Promise<T> {
   return api
-    .post<T>(url, data, config)
+    .post<T>(url, data, axiosConfig)
     .then((response) => response.data)
     .catch((error) => {
       // "Usual" callback in case of expired token
