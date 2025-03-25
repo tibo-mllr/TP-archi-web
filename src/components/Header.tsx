@@ -17,7 +17,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type ReactElement } from "react";
 
-import { LoginButton } from "./loginButton";
+import { LoginButton } from "./LoginButton";
 
 export function Header(): ReactElement {
   const pathname = usePathname();
