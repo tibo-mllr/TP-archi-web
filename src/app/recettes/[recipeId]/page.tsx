@@ -19,7 +19,7 @@ import Image from "next/image";
 import { ReactElement } from "react";
 
 import { RecipeCard } from "@/components";
-import { api, capitalizeFirstLetter } from "@/lib";
+import { apiGet, capitalizeFirstLetter } from "@/lib";
 import { Recipe } from "@/lib/types";
 
 type RecipePageProps = {
@@ -32,15 +32,9 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { recipeId } = await params;
 
-  let recipe: Recipe;
-  try {
-    recipe = await api
-      .get<Recipe>(`/recipes/${recipeId}`)
-      .then((response) => response.data);
-  } catch (error) {
-    console.error(error);
-    return {}; // If error, don't change metadata
-  }
+  const recipe = await apiGet<Recipe>(`/recipes/${recipeId}`, {
+    defaultResult: {},
+  });
 
   const globalTitle = (await parent).title?.absolute;
 
@@ -70,20 +64,14 @@ export default async function RecipePage({
 }: RecipePageProps): Promise<ReactElement> {
   const { recipeId } = await params;
 
-  let recipe: Recipe;
-  try {
-    recipe = await api
-      .get<Recipe>(`/recipes/${recipeId}`)
-      .then((response) => response.data);
-  } catch (error) {
-    console.error(error);
+  const recipe = await apiGet<Recipe | null>(`/recipes/${recipeId}`, {
+    defaultResult: null,
+  });
+  if (recipe == null) {
     return <i>An error occured. Please try again later</i>;
   }
 
-  const relatedRecipes = await api
-    .get<Recipe[]>(`/recipes/${recipeId}/related`)
-    .then((response) => response.data)
-    .catch(() => []);
+  const relatedRecipes = await apiGet<Recipe[]>(`/recipes/${recipeId}/related`);
   const hasRelated = relatedRecipes.length > 0;
 
   const {
