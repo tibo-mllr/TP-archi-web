@@ -5,14 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactElement, useEffect, useState } from "react";
 
-import { api } from "@/lib";
+import { apiGet } from "@/lib";
 
 async function checkLogin(): Promise<boolean> {
-  return await api
-    .get("/me")
-    .then((response) => response.status == 200)
-    .catch(() => false)
-    .finally(() => false);
+  return !!(await apiGet<boolean>("/me", {
+    redirect401: false,
+    defaultResult: false,
+  }));
 }
 
 export function LoginButton(): ReactElement {
@@ -36,12 +35,10 @@ export function LoginButton(): ReactElement {
         Notably this means we pull the HTML for the prof's frontpage on each logout (couple kB of data).
         But as it is not rendered this is not too big a deal. If we had control over the API and could prevent this 302 response we could avoid this.
     */
-    await api
-      .get("/logout", { headers: { Accept: "*/*" } })
-      .catch(() => {
-        console.error("Failed to logout");
-      })
-      .finally(() => setIsLoggedIn(false));
+    await apiGet<void>("/logout", {
+      axiosConfig: { headers: { Accept: "*/*" } },
+    });
+    setIsLoggedIn(false);
   }
 
   if (isLoggedIn) {

@@ -3,13 +3,11 @@ import Image from "next/image";
 import { type ReactElement } from "react";
 
 import { RecipeCard } from "@/components";
-import { api } from "@/lib";
+import { apiGet } from "@/lib";
 import { type Recipe } from "@/lib/types";
 
 export default async function Home(): Promise<ReactElement> {
-  const recipes = await api
-    .get<Recipe[]>("/recipes")
-    .then((response) => response.data);
+  const recipes = await apiGet<Recipe[]>("/recipes");
 
   return (
     <>
