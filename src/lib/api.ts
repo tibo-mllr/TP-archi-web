@@ -33,10 +33,12 @@ export async function apiGet<T>(
       // "Usual" callback in case of expired token
       if (redirect401 && error.response.status == 401) {
         redirect("/login");
+      } else {
+        // TODO: This does not work; use an interceptor instead
+        console.error(error);
       }
 
       // Custom callback in other cases
-      console.error(error);
       const callbackResult = errorCallback(error);
       return callbackResult || defaultResult;
     })
@@ -61,9 +63,10 @@ export async function apiPost<T>(
       // "Usual" callback in case of expired token
       if (redirect401 && error.response.status == 401) {
         redirect("/login");
+      } else {
+        console.error(error);
       }
 
-      console.error(error);
       // Custom callback in other cases
       const callbackResult = errorCallback(error);
       return callbackResult || defaultResult;
