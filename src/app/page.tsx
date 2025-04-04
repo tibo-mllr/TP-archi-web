@@ -1,4 +1,5 @@
-import { Grid2 } from "@mui/material";
+import { Box, Grid2 } from "@mui/material";
+import Image from "next/image";
 import { type ReactElement } from "react";
 
 import { RecipeCard } from "@/components";
@@ -11,15 +12,28 @@ export default async function Home(): Promise<ReactElement> {
     .then((response) => response.data);
 
   return (
-    <Grid2 container columns={{ xs: 4, sm: 8, md: 12 }} spacing={3}>
-      {recipes.map((recipe) => (
-        <Grid2 key={recipe.id} size={{ xs: 2, sm: 4, md: 4 }}>
-          <RecipeCard
-            recipe={recipe}
-            imageSizes="(max-width: 900px) 50vw, 33vw"
-          />
-        </Grid2>
-      ))}
-    </Grid2>
+    <>
+      <Box position="relative" width="100%" height="100vh" display="flex">
+        <Image
+          src="/cuisine.webp"
+          fill
+          sizes="100vw"
+          alt="background"
+          style={{
+            objectFit: "cover",
+          }}
+        />
+      </Box>
+      <Grid2 container columns={{ xs: 4, sm: 8, md: 12 }} spacing={3}>
+        {recipes.map((recipe) => (
+          <Grid2 key={recipe.id} size={{ xs: 2, sm: 4, md: 4 }}>
+            <RecipeCard
+              recipe={recipe}
+              imageSizes="(max-width: 900px) 50vw, 33vw"
+            />
+          </Grid2>
+        ))}
+      </Grid2>
+    </>
   );
 }

@@ -46,7 +46,7 @@ export function Header(): ReactElement {
   );
 
   return (
-    <AppBar position="static" color="inherit" enableColorOnDark>
+    <AppBar position="sticky" color="inherit" enableColorOnDark>
       <Toolbar
         sx={{
           paddingY: 2,
