@@ -26,6 +26,18 @@ export default async function Home(): Promise<ReactElement> {
         }}
       />
 
+      {/* Black filter for better readability */}
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "70%",
+          background: "rgba(0, 0, 0, 0.4)",
+        }}
+      />
+
       {/* Gradient overlay at bottom */}
       <Box
         sx={{
@@ -34,7 +46,7 @@ export default async function Home(): Promise<ReactElement> {
           left: 0,
           width: "100%",
           height: "30%",
-          background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, var(--background) 100%)`,
+          background: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, var(--background) 100%)`,
         }}
       />
       <Grid2 container columns={{ xs: 4, sm: 8, md: 12 }} spacing={3}>
