@@ -12,11 +12,11 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type ReactElement } from "react";
 
+import { ImageWithFallback } from "./ImageWithFallback";
 import { LoginButton } from "./loginButton";
 
 export function Header(): ReactElement {
@@ -66,7 +66,7 @@ export function Header(): ReactElement {
         }}
       >
         {/* Logo and site name, centered inside the whole nav */}
-        <Image src="/logo.webp" alt="Logo" width={60} height={60} />
+        <ImageWithFallback src="/logo.webp" alt="Logo" width={60} height={60} />
         <Typography variant="h5">Sigma cooking</Typography>
 
         {/* Navigation */}
