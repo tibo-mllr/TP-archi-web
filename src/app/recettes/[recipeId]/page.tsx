@@ -15,10 +15,9 @@ import {
   Typography,
 } from "@mui/material";
 import { Metadata, ResolvingMetadata } from "next";
-import Image from "next/image";
 import { ReactElement } from "react";
 
-import { RecipeCard } from "@/components";
+import { ImageWithFallback, RecipeCard } from "@/components";
 import { api, capitalizeFirstLetter } from "@/lib";
 import { Recipe } from "@/lib/types";
 
@@ -133,13 +132,14 @@ export default async function RecipePage({
                     aspectRatio: "16 / 9",
                   }}
                 >
-                  <Image
+                  <ImageWithFallback
                     src={image_url}
                     alt={name ?? "An image of the dish"}
                     fill
                     sizes="(max-width: 600px) 100vw, (max-width: 900px) 67vw, 50vw"
                     style={{ objectFit: "contain" }}
                     priority
+                    hideIfNoImage
                   />
                 </CardMedia>
               </Card>

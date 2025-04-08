@@ -1,9 +1,10 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
-import Image from "next/image";
 import Link from "next/link";
 import { ReactElement } from "react";
 
 import { Recipe } from "@/lib/types";
+
+import { ImageWithFallback } from "./ImageWithFallback";
 
 type RecipeCardProps = {
   recipe: Recipe;
@@ -41,8 +42,8 @@ export function RecipeCard({
       <CardMedia
         sx={{ position: "relative", width: "100%", aspectRatio: "4 / 3" }}
       >
-        <Image
-          src={image_url || "/defaultDishImage.webp"}
+        <ImageWithFallback
+          src={image_url}
           alt={name ?? "An image of the dish"}
           fill
           sizes={imageSizes}
