@@ -46,7 +46,19 @@ export function Header(): ReactElement {
   );
 
   return (
-    <AppBar position="static" color="inherit" enableColorOnDark>
+    <AppBar
+      position="sticky"
+      {...(pathname === "/"
+        ? {
+            sx: {
+              backgroundColor: "rgba(55, 55, 55, 0.6)",
+              color: "white",
+              backgroundImage: "none",
+            },
+          }
+        : { color: "inherit" })}
+      enableColorOnDark
+    >
       <Toolbar
         sx={{
           paddingY: 2,
