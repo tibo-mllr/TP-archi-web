@@ -125,7 +125,7 @@ export default async function RecipePage({
           <Grid2 size={{ xs: 12, sm: 4, md: 4 }}>
             <List>
               <ListItem>
-                <AddToFavoritesButton recipe={recipe} />
+                <AddToFavoritesButton recipeId={recipeId} />
               </ListItem>
               <ListItem>
                 <ListItemIcon>

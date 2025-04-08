@@ -3,18 +3,20 @@
 // Use client necessary because we want to make authenticated calls from client
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
+import { Grid2 } from "@mui/material";
 import Button from "@mui/material/Button";
 import { ReactElement, useEffect, useState } from "react";
 
 import { api, apiPost, getFavorites, getLoggedInUser } from "@/lib";
-import { type Recipe } from "@/lib/types";
+
+import FavoritesCount from "./FavoritesCount";
 
 type AddToFavoritesButtonProps = {
-  recipe: Recipe;
+  recipeId: string;
 };
 
 export default function AddToFavoritesButton({
-  recipe,
+  recipeId,
 }: AddToFavoritesButtonProps): ReactElement {
   const [isInFavorites, setIsInFavorites] = useState(false);
   useEffect(() => {
@@ -22,23 +24,23 @@ export default function AddToFavoritesButton({
       const favoriteIDs = ((await getFavorites()) || []).map(
         (recipe) => recipe.id,
       );
-      setIsInFavorites(favoriteIDs.includes(recipe.id));
+      setIsInFavorites(favoriteIDs.includes(recipeId));
     }
     checkIsInFavorites();
-  }, [isInFavorites, recipe.id]);
+  }, [isInFavorites, recipeId]);
 
   async function addRecipeToFavorites(): Promise<void> {
     await apiPost(
       `/users/${getLoggedInUser()}/favorites`,
       {},
-      { axiosConfig: { params: { recipeID: recipe.id } } },
+      { axiosConfig: { params: { recipeID: recipeId } } },
     );
     setIsInFavorites(true);
   }
 
   async function deleteRecipeFromFavorites(): Promise<void> {
     await api.delete(`/users/${getLoggedInUser()}/favorites`, {
-      params: { recipeID: recipe.id },
+      params: { recipeID: recipeId },
     });
     setIsInFavorites(false);
   }
@@ -53,7 +55,18 @@ export default function AddToFavoritesButton({
           "&:hover": { backgroundColor: "#F58A8A" },
           textAlign: "center",
         }}
-        startIcon={<DeleteRoundedIcon />}
+        startIcon={
+          <Grid2
+            display="flex"
+            flexDirection="row"
+            gap={1}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <FavoritesCount recipeId={recipeId} />
+            <DeleteRoundedIcon />
+          </Grid2>
+        }
         onClick={deleteRecipeFromFavorites}
       >
         Unfavorite
@@ -69,7 +82,18 @@ export default function AddToFavoritesButton({
           "&:hover": { backgroundColor: "#FF407F" },
           textAlign: "center",
         }}
-        startIcon={<FavoriteBorderRoundedIcon />}
+        startIcon={
+          <Grid2
+            display="flex"
+            flexDirection="row"
+            gap={1}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <FavoritesCount recipeId={recipeId} />
+            <FavoriteBorderRoundedIcon />
+          </Grid2>
+        }
         onClick={addRecipeToFavorites}
       >
         Add to Favorites
