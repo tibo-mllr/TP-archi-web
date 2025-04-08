@@ -64,6 +64,7 @@ export function Header(): ReactElement {
               color="inherit"
               onClick={() => setOpen(true)}
               sx={{ marginLeft: "auto" }}
+              aria-label="Menu"
             >
               <MenuIcon />
             </IconButton>
