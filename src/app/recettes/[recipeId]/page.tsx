@@ -19,7 +19,7 @@ import { Metadata, ResolvingMetadata } from "next";
 import { ReactElement } from "react";
 
 import { ImageWithFallback, RecipeCard } from "@/components";
-import { apiGet, capitalizeFirstLetter, parseInstructions } from "@/lib";
+import { API, capitalizeFirstLetter, parseInstructions } from "@/lib";
 import { Recipe } from "@/lib/types";
 
 import AddToFavoritesButton from "./ui/AddToFavoritesButton";
@@ -34,9 +34,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { recipeId } = await params;
 
-  const recipe = await apiGet<Recipe>(`/recipes/${recipeId}`, {
-    defaultResult: {},
-  });
+  const recipe = await API.getRecipe(recipeId, {} as Recipe);
 
   const globalTitle = (await parent).title?.absolute;
 
@@ -50,14 +48,12 @@ export default async function RecipePage({
 }: RecipePageProps): Promise<ReactElement> {
   const { recipeId } = await params;
 
-  const recipe = await apiGet<Recipe | null>(`/recipes/${recipeId}`, {
-    defaultResult: null,
-  });
+  const recipe = await API.getRecipe(recipeId, null);
   if (recipe == null) {
     return <i>An error occured. Please try again later</i>;
   }
 
-  const relatedRecipes = await apiGet<Recipe[]>(`/recipes/${recipeId}/related`);
+  const relatedRecipes = await API.getRelatedRecipes(recipeId);
   const hasRelated = relatedRecipes.length > 0;
 
   const {

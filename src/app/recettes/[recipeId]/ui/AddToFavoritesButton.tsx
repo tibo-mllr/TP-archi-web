@@ -7,7 +7,7 @@ import { Grid2 } from "@mui/material";
 import Button from "@mui/material/Button";
 import { ReactElement, useEffect, useState } from "react";
 
-import { api, apiPost, getFavorites, getLoggedInUser } from "@/lib";
+import { API } from "@/lib";
 
 import FavoritesCount from "./FavoritesCount";
 
@@ -21,27 +21,19 @@ export default function AddToFavoritesButton({
   const [isInFavorites, setIsInFavorites] = useState(false);
   useEffect(() => {
     async function checkIsInFavorites(): Promise<void> {
-      const favoriteIDs = ((await getFavorites()) || []).map(
-        (recipe) => recipe.id,
-      );
+      const favoriteIDs = (await API.getFavorites()).map((recipe) => recipe.id);
       setIsInFavorites(favoriteIDs.includes(recipeId));
     }
     checkIsInFavorites();
   }, [isInFavorites, recipeId]);
 
   async function addRecipeToFavorites(): Promise<void> {
-    await apiPost(
-      `/users/${getLoggedInUser()}/favorites`,
-      {},
-      { axiosConfig: { params: { recipeID: recipeId } } },
-    );
+    await API.addFavorite(recipeId);
     setIsInFavorites(true);
   }
 
   async function deleteRecipeFromFavorites(): Promise<void> {
-    await api.delete(`/users/${getLoggedInUser()}/favorites`, {
-      params: { recipeID: recipeId },
-    });
+    await API.deleteFavorite(recipeId);
     setIsInFavorites(false);
   }
 
