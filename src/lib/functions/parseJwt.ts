@@ -1,0 +1,15 @@
+type JWTContent = {
+  iss: string;
+  sub: string;
+  exp: number;
+  iat: number;
+  jti: string;
+  roles: string[];
+};
+
+export function parseJwt(token: string): JWTContent {
+  // eslint-disable-next-line prefer-destructuring
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace("-", "+").replace("_", "/");
+  return JSON.parse(window.atob(base64));
+}

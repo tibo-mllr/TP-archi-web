@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -22,6 +22,9 @@ jobs:
 
       - name: Run build & linter
         run: npm run build
+
+      - name: Run tests
+        run: npm run test
 
   docker:
     runs-on: ubuntu-latest
@@ -47,4 +50,3 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/${{ github.repository_owner}}/sigma-cooking:${{ github.sha }}
-

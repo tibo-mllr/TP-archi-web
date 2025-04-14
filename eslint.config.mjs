@@ -1,10 +1,11 @@
-import globals from "globals";
 import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
+import pluginNext from "@next/eslint-plugin-next";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+import pluginPrettier from "eslint-plugin-prettier/recommended";
 import pluginReact from "eslint-plugin-react";
 import pluginReactHooks from "eslint-plugin-react-hooks";
-import pluginNext from "@next/eslint-plugin-next";
-import pluginPrettier from "eslint-plugin-prettier/recommended";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -45,6 +46,6 @@ export default [
       "@typescript-eslint/no-explicit-any": "error",
     },
   },
+  jsxA11y.flatConfigs.recommended,
   pluginPrettier,
 ];
-
