@@ -1,7 +1,6 @@
 import Axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { deleteCookie } from "cookies-next";
 
-
 export const api = Axios.create({
   baseURL: "https://gourmet.cours.quimerch.com",
   // Make an authenticated call if possible
