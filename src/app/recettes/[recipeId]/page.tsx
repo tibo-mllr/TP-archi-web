@@ -20,7 +20,7 @@ import Image from "next/image";
 import { ReactElement } from "react";
 
 import { RecipeCard } from "@/components";
-import { apiGet, capitalizeFirstLetter } from "@/lib";
+import { apiGet, capitalizeFirstLetter, parseInstructions } from "@/lib";
 import { Recipe } from "@/lib/types";
 
 import AddToFavoritesButton from "./ui/AddToFavoritesButton";
@@ -44,23 +44,6 @@ export async function generateMetadata(
   return {
     title: `${recipe.name || ""} | ${globalTitle}`,
   };
-}
-
-// TODO: Move to different file probably
-function parseInstructions(instructions?: string): ReactElement {
-  const lines = instructions?.split("\n");
-  let isList = false;
-  const elements = lines?.map((line, index) => {
-    if (line.startsWith("-")) {
-      isList = true;
-      return <li key={index}>{line.slice(1).trim()}</li>;
-    }
-    return <p key={index}>{line}</p>;
-  });
-
-  if (isList) return <ul>{elements}</ul>;
-
-  return <div>{elements}</div>;
 }
 
 export default async function RecipePage({

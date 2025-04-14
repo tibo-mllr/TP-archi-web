@@ -1,6 +1,8 @@
 import Axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { deleteCookie } from "cookies-next";
 
+import { Recipe } from "./types";
+
 export const api = Axios.create({
   baseURL: "https://gourmet.cours.quimerch.com",
   // Make an authenticated call if possible
@@ -89,4 +91,14 @@ export async function apiPost<T>(
       return callbackResult || defaultResult;
     })
     .finally(() => defaultResult);
+}
+
+export async function getFavorites(): Promise<Recipe[] | undefined> {
+  const recipeResults = await apiGet<{ recipe: Recipe }[] | null>(
+    "/favorites",
+    {
+      defaultResult: [],
+    },
+  );
+  return recipeResults?.map((outerRecipeObj) => outerRecipeObj.recipe);
 }
