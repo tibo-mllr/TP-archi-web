@@ -6,8 +6,7 @@ import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded
 import Button from "@mui/material/Button";
 import { ReactElement, useEffect, useState } from "react";
 
-import { getFavorites } from "@/app/favorites/page";
-import { api, apiPost } from "@/lib";
+import { api, apiPost, getFavorites } from "@/lib";
 import { type Recipe } from "@/lib/types";
 
 type AddToFavoritesButtonProps = {

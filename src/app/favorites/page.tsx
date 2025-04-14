@@ -4,15 +4,8 @@ import { List, ListItem } from "@mui/material";
 import { ReactElement, useEffect, useState } from "react";
 
 import { RecipeCard } from "@/components";
-import { apiGet } from "@/lib";
+import { getFavorites } from "@/lib";
 import { Recipe } from "@/lib/types";
-
-export async function getFavorites(): Promise<Recipe[]> {
-  const recipeResults = await apiGet<{ recipe: Recipe }[]>("/favorites", {
-    defaultResult: [],
-  });
-  return recipeResults.map((outerRecipeObj) => outerRecipeObj.recipe);
-}
 
 export default function FavoritesPage(): ReactElement {
   // Now we know we are authenticated
