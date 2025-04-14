@@ -1,4 +1,5 @@
 import Axios, { AxiosError, AxiosRequestConfig } from "axios";
+import { deleteCookie } from "cookies-next";
 
 export const api = Axios.create({
   baseURL: "https://gourmet.cours.quimerch.com",
@@ -27,6 +28,7 @@ api.interceptors.response.use(
       // If it is a 401, redirect to the login page
       // The Nextjs `redirect` function does not work here (server-side)
       window.location.href = "/login";
+      deleteCookie("sigmacooking_loggedinuser");
     } else {
       // If it is not a 401, just log the error
       console.error(error);
