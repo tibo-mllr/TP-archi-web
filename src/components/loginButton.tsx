@@ -8,21 +8,21 @@ import { ReactElement, useEffect, useState } from "react";
 
 import { apiGet } from "@/lib";
 
-async function checkLogin(): Promise<boolean> {
+async function getLoggedInUser(): Promise<string> {
   console.log("Checking login status");
   const loginCookie = getCookie("sigmacooking_loggedinuser");
   // If the cookie is not found, that means it has expired or was never set
   if (!loginCookie) {
-    return false;
+    return ""; // No user logged in, represented by ""
   }
-  return true;
+  return loginCookie.valueOf() as string;
 }
 
 export function LoginButton(): ReactElement {
   const pathname = usePathname();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState("");
   useEffect(() => {
-    checkLogin().then((loggedIn) => setIsLoggedIn(loggedIn));
+    getLoggedInUser().then((user) => setLoggedInUser(user));
   }, [pathname]);
 
   async function logout(): Promise<void> {
@@ -42,19 +42,19 @@ export function LoginButton(): ReactElement {
     await apiGet<void>("/logout", {
       axiosConfig: { headers: { Accept: "*/*" } },
     });
-    setIsLoggedIn(false);
+    setLoggedInUser("");
     // Delete login cookie as well
     deleteCookie("sigmacooking_loggedinuser");
   }
 
-  if (isLoggedIn) {
+  if (loggedInUser) {
     return (
       <Button
         onClick={logout}
         sx={{ marginLeft: "auto" }}
         variant={pathname == "/login" ? "contained" : "outlined"}
       >
-        Logout
+        {loggedInUser} (Logout)
       </Button>
     );
   }
