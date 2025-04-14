@@ -7,7 +7,7 @@ import { RecipeCard } from "@/components";
 import { apiGet } from "@/lib";
 import { Recipe } from "@/lib/types";
 
-async function getFavorites(): Promise<Recipe[]> {
+export async function getFavorites(): Promise<Recipe[]> {
   const recipeResults = await apiGet<{ recipe: Recipe }[]>("/favorites", {
     defaultResult: [],
   });
