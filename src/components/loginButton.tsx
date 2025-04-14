@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@mui/material";
+import { deleteCookie, getCookie } from "cookies-next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactElement, useEffect, useState } from "react";
@@ -8,10 +9,13 @@ import { ReactElement, useEffect, useState } from "react";
 import { apiGet } from "@/lib";
 
 async function checkLogin(): Promise<boolean> {
-  return !!(await apiGet<boolean>("/me", {
-    redirect401: false,
-    defaultResult: false,
-  }));
+  console.log("Checking login status");
+  const loginCookie = getCookie("sigmacooking_loggedinuser");
+  // If the cookie is not found, that means it has expired or was never set
+  if (!loginCookie) {
+    return false;
+  }
+  return true;
 }
 
 export function LoginButton(): ReactElement {
@@ -19,7 +23,7 @@ export function LoginButton(): ReactElement {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     checkLogin().then((loggedIn) => setIsLoggedIn(loggedIn));
-  }, []);
+  }, [pathname]);
 
   async function logout(): Promise<void> {
     /* == Note on logout ==
@@ -39,6 +43,8 @@ export function LoginButton(): ReactElement {
       axiosConfig: { headers: { Accept: "*/*" } },
     });
     setIsLoggedIn(false);
+    // Delete login cookie as well
+    deleteCookie("sigmacooking_loggedinuser");
   }
 
   if (isLoggedIn) {
