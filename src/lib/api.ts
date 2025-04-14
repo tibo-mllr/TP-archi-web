@@ -1,5 +1,4 @@
 import Axios, { AxiosError } from "axios";
-import { redirect } from "next/navigation";
 
 export const api = Axios.create({
   baseURL: "https://gourmet.cours.quimerch.com",
@@ -15,6 +14,28 @@ interface apiCallOptions<T> {
   errorCallback?: (error: AxiosError) => void | T;
 }
 
+// Create interceptor to handle errors globally
+api.interceptors.response.use(
+  (response) => {
+    // If the response is successful, just return it so it can be handled by the caller
+    // This is the case for 200, 201, 204, etc.
+    return response;
+  },
+  (error) => {
+    // If the response is an error, check if it is a 401
+    if (error.response.status == 401 && error.config.redirect401) {
+      // If it is a 401, redirect to the login page
+      // The Nextjs `redirect` function does not work here (server-side)
+      window.location.href = "/login";
+    } else {
+      // If it is not a 401, just log the error
+      console.error(error);
+    }
+    // Return a rejected promise to the caller
+    return Promise.reject(error);
+  },
+);
+
 export async function apiGet<T>(
   url: string,
   // Very cursed syntax, but see https://stackoverflow.com/questions/23314806/setting-default-value-for-typescript-object-passed-as-argument
@@ -26,19 +47,15 @@ export async function apiGet<T>(
     errorCallback = (_error) => {}, // Default: do nothing
   }: apiCallOptions<T> = {},
 ): Promise<T> {
+  // Add the redirect401 option to the axiosConfig - only way to pass it to the interceptor
+  axiosConfig = {
+    ...axiosConfig,
+    redirect401: redirect401,
+  };
   return api
     .get<T>(url, axiosConfig)
     .then((response) => response.data)
     .catch((error) => {
-      // "Usual" callback in case of expired token
-      if (redirect401 && error.response.status == 401) {
-        redirect("/login");
-      } else {
-        // TODO: This does not work; use an interceptor instead
-        console.error(error);
-      }
-
-      // Custom callback in other cases
       const callbackResult = errorCallback(error);
       return callbackResult || defaultResult;
     })
@@ -56,18 +73,14 @@ export async function apiPost<T>(
     errorCallback = (_error) => {}, // Default: empty object - usually used for query params
   }: apiCallOptions<T> = {},
 ): Promise<T> {
+  axiosConfig = {
+    ...axiosConfig,
+    redirect401: redirect401,
+  };
   return api
     .post<T>(url, data, axiosConfig)
     .then((response) => response.data)
     .catch((error) => {
-      // "Usual" callback in case of expired token
-      if (redirect401 && error.response.status == 401) {
-        redirect("/login");
-      } else {
-        console.error(error);
-      }
-
-      // Custom callback in other cases
       const callbackResult = errorCallback(error);
       return callbackResult || defaultResult;
     })
