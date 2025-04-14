@@ -12,12 +12,12 @@ export default function FavoritesPage(): ReactElement {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   useEffect(() => {
-    getFavorites().then((recipes) => setRecipes(recipes));
+    getFavorites().then((recipes) => setRecipes(recipes || []));
   }, []);
 
   return (
     <List>
-      {recipes == null ? (
+      {!recipes.length ? (
         <p>Tu n&apos;as pas de recettes favories !</p>
       ) : (
         recipes.map((recipe) => (

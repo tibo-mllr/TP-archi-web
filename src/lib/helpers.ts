@@ -21,9 +21,12 @@ export function parseJwt(token: string): JWTContent {
   return JSON.parse(window.atob(base64));
 }
 
-export async function getFavorites(): Promise<Recipe[]> {
-  const recipeResults = await apiGet<{ recipe: Recipe }[]>("/favorites", {
-    defaultResult: [],
-  });
-  return recipeResults.map((outerRecipeObj) => outerRecipeObj.recipe);
+export async function getFavorites(): Promise<Recipe[] | undefined> {
+  const recipeResults = await apiGet<{ recipe: Recipe }[] | null>(
+    "/favorites",
+    {
+      defaultResult: [],
+    },
+  );
+  return recipeResults?.map((outerRecipeObj) => outerRecipeObj.recipe);
 }

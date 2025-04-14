@@ -19,7 +19,9 @@ export default function AddToFavoritesButton({
   const [isInFavorites, setIsInFavorites] = useState(false);
   useEffect(() => {
     async function checkIsInFavorites(): Promise<void> {
-      const favoriteIDs = (await getFavorites()).map((recipe) => recipe.id);
+      const favoriteIDs = ((await getFavorites()) || []).map(
+        (recipe) => recipe.id,
+      );
       setIsInFavorites(favoriteIDs.includes(recipe.id));
     }
     checkIsInFavorites();
