@@ -4,7 +4,7 @@ import { List, ListItem } from "@mui/material";
 import { ReactElement, useEffect, useState } from "react";
 
 import { RecipeCard } from "@/components";
-import { getFavorites } from "@/lib";
+import { API } from "@/lib";
 import { Recipe } from "@/lib/types";
 
 export default function FavoritesPage(): ReactElement {
@@ -12,7 +12,7 @@ export default function FavoritesPage(): ReactElement {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   useEffect(() => {
-    getFavorites(true).then((recipes) => setRecipes(recipes || []));
+    API.getFavorites().then((recipes) => setRecipes(recipes || []));
   }, []);
 
   return (
