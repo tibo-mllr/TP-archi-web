@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RecipeCard renders the correct styles for hover state 1`] = `
+<div>
+  <a
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root mui-1uiwynq-MuiPaper-root-MuiCard-root"
+    href="/recettes/1"
+    style="--Paper-shadow: var(--mui-shadows-1); --Paper-overlay: var(--mui-overlays-1);"
+  >
+    <div
+      class="MuiCardMedia-root mui-1r6tgo0-MuiCardMedia-root"
+    >
+      <img
+        alt="Delicious Dish"
+        data-nimg="fill"
+        decoding="async"
+        loading="lazy"
+        sizes="100vw"
+        src="/_next/image?url=%2FtestImage.webp&w=3840&q=75"
+        srcset="/_next/image?url=%2FtestImage.webp&w=640&q=75 640w, /_next/image?url=%2FtestImage.webp&w=750&q=75 750w, /_next/image?url=%2FtestImage.webp&w=828&q=75 828w, /_next/image?url=%2FtestImage.webp&w=1080&q=75 1080w, /_next/image?url=%2FtestImage.webp&w=1200&q=75 1200w, /_next/image?url=%2FtestImage.webp&w=1920&q=75 1920w, /_next/image?url=%2FtestImage.webp&w=2048&q=75 2048w, /_next/image?url=%2FtestImage.webp&w=3840&q=75 3840w"
+        style="position: absolute; height: 100%; width: 100%; left: 0px; top: 0px; right: 0px; bottom: 0px; object-fit: cover; color: transparent;"
+      />
+    </div>
+    <div
+      class="MuiCardContent-root mui-bwdk2q-MuiCardContent-root"
+    >
+      <h6
+        class="MuiTypography-root MuiTypography-h6 mui-1miy0lu-MuiTypography-root"
+      >
+        Delicious Dish
+      </h6>
+      <p
+        class="MuiTypography-root MuiTypography-body2 content mui-1u302ab-MuiTypography-root"
+      >
+        This is a very delicious dish that you will love.
+      </p>
+    </div>
+  </a>
+</div>
+`;
