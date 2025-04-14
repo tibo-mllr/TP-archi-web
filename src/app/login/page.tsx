@@ -54,7 +54,6 @@ export default function LoginPage(): ReactElement {
     // decoded.exp is in seconds but the Date constructor takes millis
     const expirationDate: Date = new Date(decoded.exp * 1000);
     // Set a readable cookie containing username and expiration date from jwt
-    console.log("Setting login cookie");
     setCookie("sigmacooking_loggedinuser", username, {
       expires: expirationDate,
       secure: true,

@@ -9,7 +9,6 @@ import { ReactElement, useEffect, useState } from "react";
 import { apiGet } from "@/lib";
 
 async function getLoggedInUser(): Promise<string> {
-  console.log("Checking login status");
   const loginCookie = getCookie("sigmacooking_loggedinuser");
   // If the cookie is not found, that means it has expired or was never set
   if (!loginCookie) {
