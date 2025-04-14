@@ -1,27 +1,18 @@
 "use client";
 
 import { Button } from "@mui/material";
-import { deleteCookie, getCookie } from "cookies-next";
+import { deleteCookie } from "cookies-next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactElement, useEffect, useState } from "react";
 
-import { apiGet } from "@/lib";
-
-async function getLoggedInUser(): Promise<string> {
-  const loginCookie = getCookie("sigmacooking_loggedinuser");
-  // If the cookie is not found, that means it has expired or was never set
-  if (!loginCookie) {
-    return ""; // No user logged in, represented by ""
-  }
-  return loginCookie.valueOf() as string;
-}
+import { apiGet, getLoggedInUser } from "@/lib";
 
 export function LoginButton(): ReactElement {
   const pathname = usePathname();
   const [loggedInUser, setLoggedInUser] = useState("");
   useEffect(() => {
-    getLoggedInUser().then((user) => setLoggedInUser(user));
+    setLoggedInUser(getLoggedInUser());
   }, [pathname]);
 
   async function logout(): Promise<void> {
