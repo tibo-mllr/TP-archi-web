@@ -1,4 +1,4 @@
-import Axios, { AxiosError } from "axios";
+import Axios, { AxiosError, AxiosRequestConfig } from "axios";
 
 export const api = Axios.create({
   baseURL: "https://gourmet.cours.quimerch.com",
@@ -8,7 +8,7 @@ export const api = Axios.create({
 });
 
 interface apiCallOptions<T> {
-  axiosConfig?: object;
+  axiosConfig?: AxiosRequestConfig;
   redirect401?: boolean;
   defaultResult?: T;
   errorCallback?: (error: AxiosError) => void | T;
@@ -50,6 +50,7 @@ export async function apiGet<T>(
   // Add the redirect401 option to the axiosConfig - only way to pass it to the interceptor
   axiosConfig = {
     ...axiosConfig,
+    // @ts-expect-error modifying axiosConfig with custom props
     redirect401: redirect401,
   };
   return api
@@ -75,6 +76,7 @@ export async function apiPost<T>(
 ): Promise<T> {
   axiosConfig = {
     ...axiosConfig,
+    // @ts-expect-error modifying axiosConfig with custom props
     redirect401: redirect401,
   };
   return api
