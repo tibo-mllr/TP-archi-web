@@ -93,11 +93,14 @@ export async function apiPost<T>(
     .finally(() => defaultResult);
 }
 
-export async function getFavorites(): Promise<Recipe[] | undefined> {
+export async function getFavorites(
+  redirect = false,
+): Promise<Recipe[] | undefined> {
   const recipeResults = await apiGet<{ recipe: Recipe }[] | null>(
     "/favorites",
     {
       defaultResult: [],
+      redirect401: redirect,
     },
   );
   return recipeResults?.map((outerRecipeObj) => outerRecipeObj.recipe);

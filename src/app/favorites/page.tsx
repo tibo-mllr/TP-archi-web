@@ -12,7 +12,7 @@ export default function FavoritesPage(): ReactElement {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   useEffect(() => {
-    getFavorites().then((recipes) => setRecipes(recipes || []));
+    getFavorites(true).then((recipes) => setRecipes(recipes || []));
   }, []);
 
   return (
