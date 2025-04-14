@@ -1,3 +1,5 @@
+import { getCookie } from "cookies-next";
+
 import { apiGet } from "./api";
 import { Recipe } from "./types";
 
@@ -29,4 +31,13 @@ export async function getFavorites(): Promise<Recipe[] | undefined> {
     },
   );
   return recipeResults?.map((outerRecipeObj) => outerRecipeObj.recipe);
+}
+
+export function getLoggedInUser(): string {
+  const loginCookie = getCookie("sigmacooking_loggedinuser");
+  // If the cookie is not found, that means it has expired or was never set
+  if (!loginCookie) {
+    return ""; // No user logged in, represented by ""
+  }
+  return loginCookie.valueOf() as string;
 }

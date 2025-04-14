@@ -29,7 +29,6 @@ type RecipePageProps = {
   params: Promise<{ recipeId: string }>;
 };
 
-// TODO: Move to different file probably
 export async function generateMetadata(
   { params }: RecipePageProps,
   parent: ResolvingMetadata,
@@ -47,7 +46,7 @@ export async function generateMetadata(
   };
 }
 
-// TODO: Ditto
+// TODO: Move to different file probably
 function parseInstructions(instructions?: string): ReactElement {
   const lines = instructions?.split("\n");
   let isList = false;

@@ -6,7 +6,7 @@ import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded
 import Button from "@mui/material/Button";
 import { ReactElement, useEffect, useState } from "react";
 
-import { api, apiPost, getFavorites } from "@/lib";
+import { api, apiPost, getFavorites, getLoggedInUser } from "@/lib";
 import { type Recipe } from "@/lib/types";
 
 type AddToFavoritesButtonProps = {
@@ -28,9 +28,8 @@ export default function AddToFavoritesButton({
   }, [isInFavorites, recipe.id]);
 
   async function addRecipeToFavorites(): Promise<void> {
-    // TODO: Do this properly, by getting the username of the currently loggedin user
     await apiPost(
-      "/users/sigma/favorites",
+      `/users/${getLoggedInUser()}/favorites`,
       {},
       { axiosConfig: { params: { recipeID: recipe.id } } },
     );
@@ -38,8 +37,7 @@ export default function AddToFavoritesButton({
   }
 
   async function deleteRecipeFromFavorites(): Promise<void> {
-    // TODO: Do this properly, by getting the username of the currently loggedin user
-    await api.delete("/users/sigma/favorites", {
+    await api.delete(`/users/${getLoggedInUser()}/favorites`, {
       params: { recipeID: recipe.id },
     });
     setIsInFavorites(false);
