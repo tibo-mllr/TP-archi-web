@@ -37,7 +37,7 @@ export class API {
     this.client.defaults.headers.common.Authorization = `Bearer ${token}`;
   }
 
-  static getAuth(redirectToLogin = false): void {
+  private static getAuth(redirectToLogin = false): void {
     const token = window.sessionStorage.getItem("token");
     // If the cookie is not found, that means it has expired or was never set
     if (!token && redirectToLogin) redirect("/login");
