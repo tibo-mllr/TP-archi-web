@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import { ReactElement, useEffect, useState } from "react";
 
 import { getFavorites } from "@/app/favorites/page";
-import { apiPost } from "@/lib";
+import { api, apiPost } from "@/lib";
 import { type Recipe } from "@/lib/types";
 
 type AddToFavoritesButtonProps = {
@@ -33,6 +33,15 @@ export default function AddToFavoritesButton({
       {},
       { axiosConfig: { params: { recipeID: recipe.id } } },
     );
+    setIsInFavorites(true);
+  }
+
+  async function deleteRecipeFromFavorites(): Promise<void> {
+    // TODO: Do this properly, by getting the username of the currently loggedin user
+    await api.delete("/users/sigma/favorites", {
+      params: { recipeID: recipe.id },
+    });
+    setIsInFavorites(false);
   }
 
   if (isInFavorites) {
@@ -46,7 +55,7 @@ export default function AddToFavoritesButton({
           textAlign: "center",
         }}
         startIcon={<DeleteRoundedIcon />}
-        onClick={() => {}}
+        onClick={deleteRecipeFromFavorites}
       >
         Unfavorite
       </Button>
