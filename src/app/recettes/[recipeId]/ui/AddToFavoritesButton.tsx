@@ -1,6 +1,7 @@
 "use client";
 
 // Use client necessary because we want to make authenticated calls from client
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import Button from "@mui/material/Button";
 import { ReactElement, useEffect, useState } from "react";
@@ -35,7 +36,21 @@ export default function AddToFavoritesButton({
   }
 
   if (isInFavorites) {
-    return <></>;
+    return (
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#ED2C2C",
+          color: "white",
+          "&:hover": { backgroundColor: "#F58A8A" },
+          textAlign: "center",
+        }}
+        startIcon={<DeleteRoundedIcon />}
+        onClick={() => {}}
+      >
+        Unfavorite
+      </Button>
+    );
   } else {
     return (
       <Button
