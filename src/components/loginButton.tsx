@@ -1,26 +1,19 @@
 "use client";
 
 import { Button } from "@mui/material";
+import { deleteCookie } from "cookies-next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactElement, useEffect, useState } from "react";
 
-import { api } from "@/lib";
-
-async function checkLogin(): Promise<boolean> {
-  return await api
-    .get("/me")
-    .then((response) => response.status == 200)
-    .catch(() => false)
-    .finally(() => false);
-}
+import { apiGet, getLoggedInUser } from "@/lib";
 
 export function LoginButton(): ReactElement {
   const pathname = usePathname();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState("");
   useEffect(() => {
-    checkLogin().then((loggedIn) => setIsLoggedIn(loggedIn));
-  }, []);
+    setLoggedInUser(getLoggedInUser());
+  }, [pathname]);
 
   async function logout(): Promise<void> {
     /* == Note on logout ==
@@ -36,22 +29,22 @@ export function LoginButton(): ReactElement {
         Notably this means we pull the HTML for the prof's frontpage on each logout (couple kB of data).
         But as it is not rendered this is not too big a deal. If we had control over the API and could prevent this 302 response we could avoid this.
     */
-    await api
-      .get("/logout", { headers: { Accept: "*/*" } })
-      .catch(() => {
-        console.error("Failed to logout");
-      })
-      .finally(() => setIsLoggedIn(false));
+    await apiGet<void>("/logout", {
+      axiosConfig: { headers: { Accept: "*/*" } },
+    });
+    setLoggedInUser("");
+    // Delete login cookie as well
+    deleteCookie("sigmacooking_loggedinuser");
   }
 
-  if (isLoggedIn) {
+  if (loggedInUser) {
     return (
       <Button
         onClick={logout}
         sx={{ marginLeft: "auto" }}
         variant={pathname == "/login" ? "contained" : "outlined"}
       >
-        Logout
+        {loggedInUser} (Logout)
       </Button>
     );
   }

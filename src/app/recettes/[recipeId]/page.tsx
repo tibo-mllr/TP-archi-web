@@ -3,6 +3,7 @@ import AvTimerIcon from "@mui/icons-material/AvTimer";
 import ClassIcon from "@mui/icons-material/Class";
 import EuroIcon from "@mui/icons-material/Euro";
 import PeopleIcon from "@mui/icons-material/People";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
 import {
   Card,
@@ -19,8 +20,10 @@ import Image from "next/image";
 import { ReactElement } from "react";
 
 import { RecipeCard } from "@/components";
-import { api, capitalizeFirstLetter } from "@/lib";
+import { apiGet, capitalizeFirstLetter, parseInstructions } from "@/lib";
 import { Recipe } from "@/lib/types";
+
+import AddToFavoritesButton from "./ui/AddToFavoritesButton";
 
 type RecipePageProps = {
   params: Promise<{ recipeId: string }>;
@@ -32,15 +35,9 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { recipeId } = await params;
 
-  let recipe: Recipe;
-  try {
-    recipe = await api
-      .get<Recipe>(`/recipes/${recipeId}`)
-      .then((response) => response.data);
-  } catch (error) {
-    console.error(error);
-    return {}; // If error, don't change metadata
-  }
+  const recipe = await apiGet<Recipe>(`/recipes/${recipeId}`, {
+    defaultResult: {},
+  });
 
   const globalTitle = (await parent).title?.absolute;
 
@@ -49,41 +46,19 @@ export async function generateMetadata(
   };
 }
 
-function parseInstructions(instructions?: string): ReactElement {
-  const lines = instructions?.split("\n");
-  let isList = false;
-  const elements = lines?.map((line, index) => {
-    if (line.startsWith("-")) {
-      isList = true;
-      return <li key={index}>{line.slice(1).trim()}</li>;
-    }
-    return <p key={index}>{line}</p>;
-  });
-
-  if (isList) return <ul>{elements}</ul>;
-
-  return <div>{elements}</div>;
-}
-
 export default async function RecipePage({
   params,
 }: RecipePageProps): Promise<ReactElement> {
   const { recipeId } = await params;
 
-  let recipe: Recipe;
-  try {
-    recipe = await api
-      .get<Recipe>(`/recipes/${recipeId}`)
-      .then((response) => response.data);
-  } catch (error) {
-    console.error(error);
+  const recipe = await apiGet<Recipe | null>(`/recipes/${recipeId}`, {
+    defaultResult: null,
+  });
+  if (recipe == null) {
     return <i>An error occured. Please try again later</i>;
   }
 
-  const relatedRecipes = await api
-    .get<Recipe[]>(`/recipes/${recipeId}/related`)
-    .then((response) => response.data)
-    .catch(() => []);
+  const relatedRecipes = await apiGet<Recipe[]>(`/recipes/${recipeId}/related`);
   const hasRelated = relatedRecipes.length > 0;
 
   const {
@@ -150,11 +125,15 @@ export default async function RecipePage({
           <Grid2 size={{ xs: 12, sm: 4, md: 4 }}>
             <List>
               <ListItem>
+                <AddToFavoritesButton recipeId={recipeId} />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <RestaurantIcon />
+                </ListItemIcon>
                 <ListItemText>
-                  <Typography variant="h6">
-                    {capitalizeFirstLetter(when_to_eat ?? "") ||
-                      "Eat whenever you want"}
-                  </Typography>
+                  <b>Type: </b>
+                  {capitalizeFirstLetter(when_to_eat || "Misc.")}
                 </ListItemText>
               </ListItem>
               {!!category && (

@@ -8,10 +8,14 @@ import {
   FormGroup,
   TextField,
 } from "@mui/material";
-import { AxiosError } from "axios";
+import { setCookie } from "cookies-next";
 import { FormEvent, ReactElement } from "react";
 
-import { api } from "@/lib";
+import { apiPost, parseJwt } from "@/lib";
+
+type LoginResponse = {
+  token: string;
+};
 
 export default function LoginPage(): ReactElement {
   async function onSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
@@ -23,23 +27,38 @@ export default function LoginPage(): ReactElement {
     const password = formData.get("password") as string;
 
     // Login directly with the API - the creds never reach the frontend server
-    await api
-      .post("/login", {
+    const { token } = await apiPost<LoginResponse>(
+      "/login",
+      {
         username: username,
         password: password,
-      })
-      .catch((error: AxiosError) => {
-        // Non-200 status codes are thrown as errors
-        if (error.status == 401) {
-          alert("Invalid username or password");
-          return;
-        } else {
-          alert("An error occurred (" + error.status + ")");
-        }
-      });
+      },
+      {
+        // Special handling of 401s for login
+        redirect401: false,
+        errorCallback: (error) => {
+          // Non-200 status codes are thrown as errors
+          if (error.status == 401) {
+            alert("Invalid username or password");
+            return;
+          } else {
+            alert("An error occurred (" + error.status + ")");
+          }
+        },
+      },
+    );
 
-    // Redirect to the home page
-    window.location.href = "/";
+    // Decode jwt to get expiration date
+    const decoded = parseJwt(token);
+    // decoded.exp is in seconds but the Date constructor takes millis
+    const expirationDate: Date = new Date(decoded.exp * 1000);
+    // Set a readable cookie containing username and expiration date from jwt
+    setCookie("sigmacooking_loggedinuser", username, {
+      expires: expirationDate,
+      secure: true,
+    });
+    // Go back to the previous page
+    history.back();
   }
 
   return (
