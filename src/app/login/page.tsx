@@ -36,6 +36,7 @@ export default function LoginPage(): ReactElement {
       {
         // Special handling of 401s for login
         redirect401: false,
+        axiosConfig: { withCredentials: false },
         errorCallback: (error) => {
           // Non-200 status codes are thrown as errors
           if (error.status == 401) {
